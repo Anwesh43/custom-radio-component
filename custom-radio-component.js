@@ -1,6 +1,6 @@
 const w = window.innerWidth,h = window.innerHeight
 class RadioComponent extends HTMLElement {
-    render() {
+    render(dir) {
         const canvas = document.createElement('canvas')
         const r = Math.max(w,h)/40
         var context = canvas.getContext('2d')
@@ -15,6 +15,11 @@ class RadioComponent extends HTMLElement {
         context.fillStyle = this.color
         this.radioCircle.draw(context,r,canvas.height/2,r)
         this.textLine.draw(context,this.text,canvas.width/2-tw/2,r+r/4,2*r,5*r/2)
+        this.textLine.update(canvas.width-2*r,dir)
+        this.radioCircle.update(dir)
+    }
+    stopped() {
+        return this.radioCircle.stopped()
     }
     constructor() {
         super()
@@ -27,7 +32,7 @@ class RadioComponent extends HTMLElement {
         this.radioCircle = new RadioCircle()
     }
     connectedCallback() {
-        this.render()
+        this.render(0)
     }
 }
 class RadioCircle  {
@@ -71,5 +76,19 @@ class TextLine {
     }
     update(maxw,dir) {
         this.lx = maxw*dir
+    }
+}
+class AnimationHandler {
+    constructor(component) {
+        this.dir = 0
+        this.component = component
+    }
+    start() {
+        const interval = setInterval(()=>{
+            this.component.render(this.dir)
+            if(this.component.stopped()) {
+                clearInterval(interval)
+            }
+        },50)
     }
 }
