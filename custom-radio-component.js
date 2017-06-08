@@ -10,8 +10,11 @@ class RadioComponent extends HTMLElement {
         canvas.height = 3*r
         context = canvas.getContext('2d')
         context.font = context.font.replace(/\d{2}/,`${r}`)
+        context.lineWidth = r/5
         context.strokeStyle = this.color
         context.fillStyle = this.color
+        this.radioCircle.draw(context,r,canvas.height/2,r)
+        this.textLine.draw(context,this.text,canvas.width/2-tw/2,r+r/4,2*r,5*r/2)
     }
     constructor() {
         super()
@@ -20,6 +23,8 @@ class RadioComponent extends HTMLElement {
         this.img = document.createElement('img')
         const shadow = this.attachShadow({mode:'open'})
         shadow.appendChild(this.img)
+        this.textLine = new TextLine()
+        this.radioCircle = new RadioCircle()
     }
     connectedCallback() {
         this.render()
