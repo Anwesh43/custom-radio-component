@@ -92,3 +92,4 @@ class AnimationHandler {
         },50)
     }
 }
+customElements.define('custom-radio',RadioComponent)
