@@ -9,6 +9,7 @@ class RadioComponent extends HTMLElement {
         canvas.width = 2*tw+3*r
         canvas.height = 3*r
         context = canvas.getContext('2d')
+        context.font = context.font.replace(/\d{2}/,`${r}`)
         context.strokeStyle = this.color
         context.fillStyle = this.color
     }
@@ -29,6 +30,11 @@ class RadioCircle  {
         this.scale = 0
     }
     draw(context,x,y,r) {
+        if(!this.insideBounds) {
+            this.insideBounds = (mx,my) =>{
+                return mx>=x-r && mx<=x+r && my>=y-r && my<=y+r
+            }
+        }
         context.beginPath()
         context.arc(x,y,r,0,2*Math.PI)
         context.stroke()
@@ -44,5 +50,21 @@ class RadioCircle  {
     }
     shouldStop() {
         return this.scale > 1 || this.scale < 0
+    }
+}
+class TextLine {
+    constructor() {
+        this.lx = 0
+    }
+    draw(context,text,tx,ty,x,y) {
+        context.beginPath()
+        context.moveTo(x,y)
+        context.lineTo(this.lx,y)
+        context.stroke()
+        context.fillStyle = 'white'
+        context.fillText(this.text,tx,ty)
+    }
+    update(maxw,dir) {
+        this.lx = maxw*dir
     }
 }
