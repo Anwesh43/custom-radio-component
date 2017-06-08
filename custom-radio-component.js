@@ -9,6 +9,8 @@ class RadioComponent extends HTMLElement {
         canvas.width = 2*tw+3*r
         canvas.height = 3*r
         context = canvas.getContext('2d')
+        context.strokeStyle = this.color
+        context.fillStyle = this.color
     }
     constructor() {
         super()
@@ -20,5 +22,27 @@ class RadioComponent extends HTMLElement {
     }
     connectedCallback() {
         this.render()
+    }
+}
+class RadioCircle  {
+    constructor() {
+        this.scale = 0
+    }
+    draw(context,x,y,r) {
+        context.beginPath()
+        context.arc(x,y,r,0,2*Math.PI)
+        context.stroke()
+        context.save()
+        context.translate(x,y)
+        context.scale(this.scale,this.scale)
+        context.arc(0,0,r,0,2*Math.PI)
+        context.fill()
+        context.restore()
+    }
+    update(dir) {
+        this.scale += 0.2*dir
+    }
+    shouldStop() {
+        return this.scale > 1 || this.scale < 0
     }
 }
