@@ -30,9 +30,16 @@ class RadioComponent extends HTMLElement {
         shadow.appendChild(this.img)
         this.textLine = new TextLine()
         this.radioCircle = new RadioCircle()
+        this.animationHandler = new AnimationHandler(this)
     }
     connectedCallback() {
         this.render(0)
+        this.img.onmousedown = (event) => {
+            const x = event.offsetX,y = event.offsetY
+            if(this.radioCircle.insideBounds(x,y) == true) {
+
+            }
+        }
     }
 }
 class RadioCircle  {
